@@ -1,0 +1,9 @@
+Configuração do Git Local:
+git config --global user.name MarianaDMG05
+git config --global user.email mariana.gomes87@etec.sp.gov.br
+
+Criar um projeto MVC(padrão de desenvolvimento):
+dotnet new mvc -o Pokedex
+
+Executar o projeto 
+dotnet watch run

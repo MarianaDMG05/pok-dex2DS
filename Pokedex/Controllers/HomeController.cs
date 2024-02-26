@@ -23,7 +23,6 @@ public class HomeController : Controller
            .Deserialize<List<Pokemon>>(dados);
            return View(pokemons);
         }
-        return View();
     }
 
     public IActionResult Privacy()

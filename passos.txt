@@ -7,3 +7,4 @@ dotnet new mvc -o Pokedex
 
 Executar o projeto 
 dotnet watch run
+Restaurar projeto

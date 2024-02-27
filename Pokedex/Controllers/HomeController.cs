@@ -16,17 +16,28 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        //Criar um objeto com o nome pokemons do tipo Lista de Pokemons 
+        List<Pokemon> pokemons = [];
         using(StreamReader leitor = new("Data\\pokemons.json"))
         {
           string dados = leitor.ReadToEnd();
-          List<Pokemon> pokemons =JsonSerializer
-           .Deserialize<List<Pokemon>>(dados);
-           return View(pokemons);
+          pokemons =JsonSerializer.Deserialize<List<Pokemon>>(dados);
         }
+
+        List<Tipo> tipos = [];
+        using (StreamReader leitor = new("Data\\tipos.json"))
+        {
+            string dados = leitor.ReadToEnd();
+            tipos = JsonSerializer.Deserialize<List<Tipo>>(dados);
+        }
+        ViewData["Tipos"] = tipos;
+        return View(pokemons);
+
     }
 
-    public IActionResult Privacy()
+    public IActionResult Details(int id)
     {
+        
         return View();
     }
 

@@ -17,45 +17,41 @@ public class HomeController : Controller
     public IActionResult Index()
     {
         //Criar um objeto com o nome pokemons do tipo Lista de Pokemons 
-        List<Pokemon> pokemons = [];
-        using(StreamReader leitor = new("Data\\pokemons.json"))
-        {
-          string dados = leitor.ReadToEnd();
-          pokemons =JsonSerializer.Deserialize<List<Pokemon>>(dados);
-        }
-
-        List<Tipo> tipos = [];
-        using (StreamReader leitor = new("Data\\tipos.json"))
-        {
-            string dados = leitor.ReadToEnd();
-            tipos = JsonSerializer.Deserialize<List<Tipo>>(dados);
-        }
+        List<Pokemon> pokemons = GetPokemons();
+        List<Tipo> tipos = GetTipos();
         ViewData["Tipos"] = tipos;
         return View(pokemons);
-
     }
 
-    public IActionResult Details(int id)
+     public IActionResult Details(int id)
+     {
+        List<Pokemon> pokemons = GetPokemons();
+        List<Tipo> tipos = GetTipos();
+        DetailsVM details = new() {
+            Tipos = tipos,
+            Atual = pokemons.FirstOrDefault(p => p.Numero == id),
+            Anterior = pokemons.OrderByDescending(p => p.Numero).FirstOrDefault(p => p.Numero < id),
+            Proximo = pokemons.OrderBy(p => p.Numero).FirstOrDefault(p => p.Numero > id),
+        };
+        return View(details);
+     }
+
+    private List<Pokemon> GetPokemons()
     {
-        List<Pokemon> pokemons = [];
         using (StreamReader leitor = new("Data\\pokemons.json"))
         {
             string dados = leitor.ReadToEnd();
-            pokemons = JsonSerializer.Deserialize<List<Pokemon>>(dados);
+            return JsonSerializer.Deserialize<List<Pokemon>>(dados);
         }
-        List<Tipo> tipos = [];
+    }
+
+    private List<Tipo> GetTipos()
+    { 
         using (StreamReader leitor = new("Data\\tipos.json"))
         {
             string dados = leitor.ReadToEnd();
-            tipos = JsonSerializer.Deserialize<List<Tipo>>(dados);
+            return JsonSerializer.Deserialize<List<Tipo>>(dados);
         }
-        ViewData["Tipos"] = tipos;
-        var pokemon = pokemons
-        .Where(p => p.Numero == id)
-        .FirstOrDefault();
-        return View(pokemon);
-
-        
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
